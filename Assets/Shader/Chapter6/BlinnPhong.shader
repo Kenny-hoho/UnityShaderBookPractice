@@ -33,7 +33,7 @@ Shader "Unity Shader Book/Chapter6/BlinnPhong"
         {
             float4 pos : SV_POSITION;
             float3 worldNormal : TEXCOORD0;
-            float3 viewDir : TEXCOORD2;
+            float3 worldPos : TEXCOORD2;
             float2 uv : TEXCOORD1;
         };
         ENDHLSL
@@ -48,12 +48,10 @@ Shader "Unity Shader Book/Chapter6/BlinnPhong"
             v2f vert(in a2v v)
             {
                 v2f o;
-                o.pos = TransformObjectToHClip(v.position);
+                o.pos = TransformObjectToHClip(v.position.xyz);
                 o.worldNormal = TransformObjectToWorldNormal(v.normal);
                 o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
-                float3 worldPos = TransformObjectToWorld(v.position.xyz);
-                float3 cameraPos = GetCameraPositionWS();
-                o.viewDir = normalize(cameraPos - worldPos);
+                o.worldPos = TransformObjectToWorld(v.position.xyz);
                 return o;
             }
             real4 frag(in v2f i) : SV_TARGET
@@ -68,7 +66,9 @@ Shader "Unity Shader Book/Chapter6/BlinnPhong"
                 half3 lightColor = light.color;
                 half3 diffuse = albedo.xyz * lightColor * saturate(dot(lightDir, i.worldNormal));
                 // sepuclar
-                float3 halfVec = normalize(lightDir + i.viewDir);
+                float3 cameraPos = GetCameraPositionWS();
+                float3 viewDir = normalize(cameraPos - i.worldPos); 
+                float3 halfVec = normalize(lightDir + viewDir);
                 half3 sepcular = _Sepcular.rgb * lightColor * pow(saturate(dot(halfVec, i.worldNormal)), _Gloss);
                 return real4(ambient + diffuse + sepcular, 1.0);
             }
