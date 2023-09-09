@@ -83,7 +83,7 @@ Shader "Unity Shader Book/Chapter7/MaskTex"
                 // compute worldSpace normal
                 float4 bump = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv);
                 float3 unpackedNormal = UnpackNormalScale(bump, _NormalScale);
-                float3 normalWS = float3(dot(i.TtoW1.xyz, unpackedNormal), dot(i.TtoW2.xyz, unpackedNormal), dot(i.TtoW3.xyz, unpackedNormal));
+                float3 normalWS = normalize(float3(dot(i.TtoW1.xyz, unpackedNormal), dot(i.TtoW2.xyz, unpackedNormal), dot(i.TtoW3.xyz, unpackedNormal)));
                 // diffuse
                 Light mainLight = GetMainLight();
                 half3 diffuse = mainLight.color * albedo * saturate(dot(mainLight.direction, normalWS));

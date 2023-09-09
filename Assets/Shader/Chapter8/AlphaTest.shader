@@ -59,7 +59,8 @@ Shader "Unity Shader Book/Chapter8/AlphaTest"
                 half3 ambient = half3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w) * albedo;
                 // diffuse
                 Light mainLight = GetMainLight();
-                half3 diffuse = mainLight.color * albedo * saturate(dot(i.worldNormal, mainLight.direction));
+                float3 worldNormal = normalize(i.worldNormal);
+                half3 diffuse = mainLight.color * albedo * saturate(dot(worldNormal, mainLight.direction));
 
                 return real4(diffuse + ambient, 1.0);
             }

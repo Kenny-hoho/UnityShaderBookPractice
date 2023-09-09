@@ -69,7 +69,8 @@ Shader "Unity Shader Book/Chapter8/ZWriteOn"
                 half3 ambient = half3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w) * albedo;
                 // diffuse
                 Light mainLight = GetMainLight();
-                half3 diffuse = mainLight.color * albedo * saturate(dot(mainLight.direction, i.worldNormal));
+                float3 worldNormal = normalize(i.worldNormal);
+                half3 diffuse = mainLight.color * albedo * saturate(dot(mainLight.direction, worldNormal));
                 return real4(ambient + diffuse, texColor.a * _AlphaBlendScale);
             }
             ENDHLSL

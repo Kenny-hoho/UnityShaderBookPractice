@@ -64,6 +64,7 @@ Shader "Unity Shader Book/Chapter6/BlinnPhong"
                 Light light = GetMainLight();
                 float3 lightDir = light.direction;
                 half3 lightColor = light.color;
+                i.worldNormal = normalize(i.worldNormal);
                 half3 diffuse = albedo.xyz * lightColor * saturate(dot(lightDir, i.worldNormal));
                 // sepuclar
                 float3 cameraPos = GetCameraPositionWS();
